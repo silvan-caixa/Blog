@@ -104,6 +104,14 @@
 					- return Ok(categoria);
 					
 				
+### Instalar Swagger
+	- dotnet add package Swashbuckle.AspNetCore
+	- 
+	- Program.cs
+		- builder.Services.AddEndpointsApiExplorer();
+		- builder.Services.AddSwaggerGen();
+		- app.UseSwagger();
+		- app.UseSwaggerUI();
 
 
 ### Configurando a string de conexão
@@ -112,3 +120,17 @@
 	- Program.cs
 		- Adiciona o endpoint padrão
 
+## 4º ETAPA
+### Tratando Erros
+	- try{} catch{}
+	- Incluir código de error
+	- Test API
+
+## 5º ETAPA
+
+### View Model
+	- Cria pasta ViewModels
+	- Cria a classe CreateCategoriaViewModel.cs
+		- prop Nome e prop slug
+	- Configura no CategoriaController o metodo post com os parametro para receber ViewModels
+### Editor ViewModel

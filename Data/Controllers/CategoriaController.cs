@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Data.Controllers;
 
@@ -6,53 +7,95 @@ namespace Blog.Data.Controllers;
 public class CategoriaController : ControllerBase
     {
     [HttpGet("categorias")]
-    public IActionResult Get([FromServices] DbBlogContext context)
+    public async Task<IActionResult> GetAsync([FromServices] DbBlogContext context)
         {
-        var categorias = context.Categorias.ToList();
-        return Ok(categorias);
+        try
+            {
+            var categorias = await context.Categorias.ToListAsync();
+            return Ok(categorias);
+            }
+        catch (Exception ex)
+            {
+            return StatusCode(500, $"código => c01x01 - {ex.Message}");
+            }
         }
 
     [HttpGet("categorias/{id}")]
-    public IActionResult GetById([FromServices] DbBlogContext context, int id)
+    public async Task<IActionResult> GetByIdAsync([FromServices] DbBlogContext context, int id)
         {
-        var categoria = context.Categorias.FirstOrDefault(x => x.Id == id);
-        if (categoria == null)
-            return NotFound();
-        return Ok(categoria);
+        try
+            {
+            var categoria = await context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
+            if (categoria == null)
+                return NotFound();
+            return Ok(categoria);
+            }
+        catch (Exception ex)
+            {
+            return StatusCode(500, $"código c02x01 - {ex.Message}");
+            }
+
         }
 
     [HttpPost("categorias")]
-    public IActionResult Post([FromServices] DbBlogContext context, [FromBody] Models.Categoria model)
+    public async Task<IActionResult> PostAsync([FromServices] DbBlogContext context, [FromBody] Models.Categoria model)
         {
-        context.Categorias.Add(model);
-        context.SaveChanges();
-        return Created($"/categorias/{model.Id}", model);
+        try
+            {
+            await context.Categorias.AddAsync(model);
+            await context.SaveChangesAsync();
+            return Created($"/categorias/{model.Id}", model);
+            }
+        catch (DbUpdateException ex)
+            {
+            return StatusCode(500, $"error: 03x01 Não foi possivel incluir a categoria {ex.Message}");
+            }
+        catch (Exception ex)
+            {
+            return StatusCode(500, $"error: 03x02 Falha interna no servidor {ex.Message}");
+            }
         }
 
     [HttpPut("categorias/{id}")]
-    public IActionResult Put([FromServices] DbBlogContext context, int id, [FromBody] Models.Categoria model)
+    public async Task<IActionResult> PutAsync([FromServices] DbBlogContext context, int id, [FromBody] Models.Categoria model)
         {
-        var categoria = context.Categorias.FirstOrDefault(x => x.Id == id);
-        if (categoria == null)
-            return NotFound();
+        try
+            {
+            var categoria = await context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
+            if (categoria == null)
+                return NotFound();
 
-        categoria.Nome = model.Nome;
-        categoria.Slug = model.Slug;
+            categoria.Nome = model.Nome;
+            categoria.Slug = model.Slug;
 
-        context.Categorias.Update(categoria);
-        context.SaveChanges();
-        return Ok(categoria);
+            context.Categorias.Update(categoria);
+            await context.SaveChangesAsync();
+            return Ok(categoria);
+            }
+        catch (Exception ex)
+            {
+            return StatusCode(500, $"error: 04x01 Falha interna => {ex.Message}");
+            }
+
         }
     [HttpDelete("categorias/{id}")]
-    public IActionResult Delete([FromServices] DbBlogContext context, int id)
+    public async Task<IActionResult> DeleteAsync([FromServices] DbBlogContext context, int id)
         {
-        var categoria = context.Categorias.FirstOrDefault(x => x.Id == id);
-        if (categoria == null)
-            return NotFound();
+        try
+            {
+            var categoria = await context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
+            if (categoria == null)
+                return NotFound();
 
-        context.Categorias.Remove(categoria);
-        context.SaveChanges();
-        return NoContent();
+            context.Categorias.Remove(categoria);
+            await context.SaveChangesAsync();
+            return NoContent();
+            }
+        catch (Exception ex)
+            {
+            return StatusCode(500, $"error: 05x01 Falha interna => {ex.Message}");
+            }
+
         }
     }
 
