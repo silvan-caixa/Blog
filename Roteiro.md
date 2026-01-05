@@ -140,5 +140,25 @@
 
 ## 6º ETAPA
 	- Patronizando erros
+	
+		
+	- Desabilita no program.cs o ModelState, precisa explicitar esse código nos metodos do controller:
+		
+		- no Program:
+			- AddControllers()
+				.ConfigureApiBehaviorOptions(options => {
+					options.SuppressModelStateInvalidFilter = true;
+				})
+
 	- Cria no ViewModels a class ResultViewModel.cs
 		- Implementa metoda data e errors
+		- Cria classe ResultViewModel<T> no ViewModels com 4 construtores
+		- ResultViewModel(T data, List<string>errors){Data = data, Errors = errors}
+		- ResultViewModel(T data){Data = data}
+		- ResultViewModel(List<string>errors){Errors = errors}
+		- ResultViewModel(string error){Errors = Add(error)}
+		- prop T Data
+		- prop List<string> Errors
+	- Metodo no Post
+		- if(!ModelState.Isvalid) return BadRequest();
+		- if(!ModelState.Isvalid) return BadRequest(ModelState.Values);

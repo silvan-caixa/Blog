@@ -14,11 +14,16 @@ public class CategoriaController : ControllerBase
         try
             {
             var categorias = await context.Categorias.ToListAsync();
-            return Ok(categorias);
+            //return Ok(categorias);
+            return Ok(new ResultViewModel<List<Categoria>>(categorias));
+
             }
+        //catch (Exception ex)
         catch (Exception ex)
+
             {
-            return StatusCode(500, $"código => c01x01 - {ex.Message}");
+            //return StatusCode(500, $"código => c01x01 - {ex.Message}");
+            return StatusCode(500, new ResultViewModel<List<Categoria>>($"código => c01x01 - {ex.Message}"));
             }
         }
 
@@ -29,12 +34,15 @@ public class CategoriaController : ControllerBase
             {
             var categoria = await context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
             if (categoria == null)
-                return NotFound();
-            return Ok(categoria);
+                //return NotFound();
+                return NotFound(new ResultViewModel<Categoria>($"Conteudo não encontrado"));
+            //return Ok(categoria);
+            return Ok(new ResultViewModel<Categoria>(categoria));
             }
         catch (Exception ex)
             {
-            return StatusCode(500, $"código c02x01 - {ex.Message}");
+            //return StatusCode(500, $"código c02x01 - {ex.Message}");
+            return StatusCode(500, new ResultViewModel<List<Categoria>>($"código c02x02 - {ex.Message}"));
             }
 
         }
@@ -63,6 +71,8 @@ public class CategoriaController : ControllerBase
         [FromServices] DbBlogContext context,
         [FromBody] EditorCategoriaViewModel model)
         {
+        if (!ModelState.IsValid) return BadRequest(ModelState.Values);
+
         try
             {
             var categoria = new Categoria
