@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Blog.Models;
+using Blog.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Data.Controllers;
@@ -37,14 +39,40 @@ public class CategoriaController : ControllerBase
 
         }
 
+    //[HttpPost("categorias")]
+    //public async Task<IActionResult> PostAsync([FromServices] DbBlogContext context, [FromBody] Models.Categoria model)
+    //    {
+    //    try
+    //        {
+    //        await context.Categorias.AddAsync(model);
+    //        await context.SaveChangesAsync();
+    //        return Created($"/categorias/{model.Id}", model);
+    //        }
+    //    catch (DbUpdateException ex)
+    //        {
+    //        return StatusCode(500, $"error: 03x01 Não foi possivel incluir a categoria {ex.Message}");
+    //        }
+    //    catch (Exception ex)
+    //        {
+    //        return StatusCode(500, $"error: 03x02 Falha interna no servidor {ex.Message}");
+    //        }
+    //    }
+
     [HttpPost("categorias")]
-    public async Task<IActionResult> PostAsync([FromServices] DbBlogContext context, [FromBody] Models.Categoria model)
+    public async Task<IActionResult> PostAsync(
+        [FromServices] DbBlogContext context,
+        [FromBody] EditorCategoriaViewModel model)
         {
         try
             {
-            await context.Categorias.AddAsync(model);
+            var categoria = new Categoria
+                {
+                Nome = model.Nome,
+                Slug = model.Slug.ToLower()
+                };
+            await context.Categorias.AddAsync(categoria);
             await context.SaveChangesAsync();
-            return Created($"/categorias/{model.Id}", model);
+            return Created($"/categorias/{categoria.Id}", categoria);
             }
         catch (DbUpdateException ex)
             {
@@ -55,9 +83,32 @@ public class CategoriaController : ControllerBase
             return StatusCode(500, $"error: 03x02 Falha interna no servidor {ex.Message}");
             }
         }
+    //[HttpPut("categorias/{id}")]
+    //public async Task<IActionResult> PutAsync([FromServices] DbBlogContext context, int id, [FromBody] Models.Categoria model)
+    //    {
+    //    try
+    //        {
+    //        var categoria = await context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
+    //        if (categoria == null)
+    //            return NotFound();
 
+    //        categoria.Nome = model.Nome;
+    //        categoria.Slug = model.Slug;
+
+    //        context.Categorias.Update(categoria);
+    //        await context.SaveChangesAsync();
+    //        return Ok(categoria);
+    //        }
+    //    catch (Exception ex)
+    //        {
+    //        return StatusCode(500, $"error: 04x01 Falha interna => {ex.Message}");
+    //        }
+
+    //    }
     [HttpPut("categorias/{id}")]
-    public async Task<IActionResult> PutAsync([FromServices] DbBlogContext context, int id, [FromBody] Models.Categoria model)
+    public async Task<IActionResult> PutAsync(
+        [FromServices] DbBlogContext context, int id,
+        [FromBody] EditorCategoriaViewModel model)
         {
         try
             {
@@ -66,7 +117,7 @@ public class CategoriaController : ControllerBase
                 return NotFound();
 
             categoria.Nome = model.Nome;
-            categoria.Slug = model.Slug;
+            categoria.Slug = model.Slug.ToLower();
 
             context.Categorias.Update(categoria);
             await context.SaveChangesAsync();

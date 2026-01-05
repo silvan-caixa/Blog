@@ -127,10 +127,18 @@
 	- Test API
 
 ## 5º ETAPA
-
+### Revisar aula a partir de VIEWMODELS
 ### View Model
 	- Cria pasta ViewModels
 	- Cria a classe CreateCategoriaViewModel.cs
 		- prop Nome e prop slug
 	- Configura no CategoriaController o metodo post com os parametro para receber ViewModels
 ### Editor ViewModel
+	- Validacao
+		- [Required(ErroMessage = "Campo Obrigatório")]
+		- [StringLength(40, MinimumLength = 3, ErrorMessage = "Campo minimo 3 maximo 40 caracter")]
+
+## 6º ETAPA
+	- Patronizando erros
+	- Cria no ViewModels a class ResultViewModel.cs
+		- Implementa metoda data e errors
