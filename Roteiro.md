@@ -162,3 +162,12 @@
 	- Metodo no Post
 		- if(!ModelState.Isvalid) return BadRequest();
 		- if(!ModelState.Isvalid) return BadRequest(ModelState.Values);
+	- Cria pasta Extensions - utilizar no post
+		- Cria classe ModelStateExtensions.cs
+			- public static List<string> GetErrors(this ModelStateDictionary modelState)
+				- var errors = new List<string>();
+				- foreach(var state in modelState.Values)
+					- foreach(var error in state.Errors)
+						- errors.Add(error.ErrorMessage);
+				- return errors;
+	- Finalizado parcialmente 6º ETAPA - pedente Post(BadRequest) Put e Delete

@@ -6,7 +6,8 @@ builder.Services.AddControllers()
          options =>
          {
              options.SuppressModelStateInvalidFilter = true;
-         });
+         })
+    ;
 builder.Services.AddDbContext<DbBlogContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

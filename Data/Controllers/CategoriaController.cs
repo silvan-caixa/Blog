@@ -1,4 +1,5 @@
-﻿using Blog.Models;
+﻿using Blog.Extensions;
+using Blog.Models;
 using Blog.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -71,7 +72,10 @@ public class CategoriaController : ControllerBase
         [FromServices] DbBlogContext context,
         [FromBody] EditorCategoriaViewModel model)
         {
-        if (!ModelState.IsValid) return BadRequest(ModelState.Values);
+        //if (!ModelState.IsValid) return BadRequest(ModelState.Values);
+        if (!ModelState.IsValid)
+            return BadRequest(new ResultViewModel<List<Categoria>>(ModelState.GetErrors()));
+
 
         try
             {
@@ -120,22 +124,26 @@ public class CategoriaController : ControllerBase
         [FromServices] DbBlogContext context, int id,
         [FromBody] EditorCategoriaViewModel model)
         {
+        if (!ModelState.IsValid)
+            return BadRequest(new ResultViewModel<List<Categoria>>(ModelState.GetErrors()));
         try
             {
             var categoria = await context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
             if (categoria == null)
-                return NotFound();
+                //return NotFound();
+                return NotFound(new ResultViewModel<List<Categoria>>("Registro não localizado"));
 
             categoria.Nome = model.Nome;
             categoria.Slug = model.Slug.ToLower();
 
             context.Categorias.Update(categoria);
             await context.SaveChangesAsync();
-            return Ok(categoria);
+            //return Ok(categoria);
+            return Ok(new ResultViewModel<Categoria>(categoria));
             }
         catch (Exception ex)
             {
-            return StatusCode(500, $"error: 04x01 Falha interna => {ex.Message}");
+            return StatusCode(500, new ResultViewModel<List<Categoria>>($"error: 04x01 Falha interna => {ex.Message}"));
             }
 
         }
@@ -146,7 +154,7 @@ public class CategoriaController : ControllerBase
             {
             var categoria = await context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
             if (categoria == null)
-                return NotFound();
+                return NotFound(new ResultViewModel<List<Categoria>>("Registro não localizado"));
 
             context.Categorias.Remove(categoria);
             await context.SaveChangesAsync();
@@ -154,7 +162,7 @@ public class CategoriaController : ControllerBase
             }
         catch (Exception ex)
             {
-            return StatusCode(500, $"error: 05x01 Falha interna => {ex.Message}");
+            return StatusCode(500, new ResultViewModel<List<Categoria>>($"error: 05x01 Falha interna => {ex.Message}"));
             }
 
         }
