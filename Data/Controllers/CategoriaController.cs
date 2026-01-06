@@ -86,7 +86,7 @@ public class CategoriaController : ControllerBase
                 };
             await context.Categorias.AddAsync(categoria);
             await context.SaveChangesAsync();
-            return Created($"/categorias/{categoria.Id}", categoria);
+            return Created($"/categorias/{categoria.Id}", new ResultViewModel<Categoria>(categoria));
             }
         catch (DbUpdateException ex)
             {
@@ -158,7 +158,9 @@ public class CategoriaController : ControllerBase
 
             context.Categorias.Remove(categoria);
             await context.SaveChangesAsync();
-            return NoContent();
+            //return NoContent();
+            return Ok(new ResultViewModel<Categoria>(categoria));
+
             }
         catch (Exception ex)
             {

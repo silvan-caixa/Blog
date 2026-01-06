@@ -196,3 +196,5 @@
 			- InitialCreate.cs
 			- BlogContextModelSnapshot.cs
 
+## 7º ETAPA
+### Revisar aula a partir de AUTENTICAÇÃO E AUTORIZAÇÃO
