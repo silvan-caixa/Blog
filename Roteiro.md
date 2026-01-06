@@ -170,4 +170,29 @@
 					- foreach(var error in state.Errors)
 						- errors.Add(error.ErrorMessage);
 				- return errors;
-	- Finalizado parcialmente 6º ETAPA - pedente Post(BadRequest) Put e Delete
+# PASTAS IMPLEMENTADA NO PROJETO ATÉ AQUI
+	- DATA
+		- CONTROLLERS
+		- MAPPING
+		- ARQUIVO
+			- DbBlogContext.cs
+	- MODELS
+		- Arquivos
+			-	Categoria.cs
+	- CONTROLLERS
+		- Arquivos
+			- HomeController.cs
+			- CategoriasController.cs
+	- VIEWMODELS
+		- Arquivos
+			- CreateCategoriaViewModel.cs
+			- ResultViewModel.cs
+			
+	- EXTENSIONS
+		- Arquivos
+			- ModelStateExtensions.cs
+	- MIGRATIONS
+		- Arquivos
+			- InitialCreate.cs
+			- BlogContextModelSnapshot.cs
+
