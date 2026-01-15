@@ -214,3 +214,10 @@
 			- RoleMap
 			- PostMap
 			- PostTagMap
+	- Aula TOKEN e JWT
+		- Cria na raiz Configuration.cs
+			- class static
+			- prop string JwtKey = "esta é a chave secreta do meu token"
+			- 
+
+	# Proxima aula TOKEN SERVICE
