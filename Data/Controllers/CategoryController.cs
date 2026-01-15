@@ -7,16 +7,16 @@ using Microsoft.EntityFrameworkCore;
 namespace Blog.Data.Controllers;
 
 [ApiController]
-public class CategoriaController : ControllerBase
+public class CategoryController : ControllerBase
     {
     [HttpGet("categorias")]
     public async Task<IActionResult> GetAsync([FromServices] DbBlogContext context)
         {
         try
             {
-            var categorias = await context.Categorias.ToListAsync();
+            var categorias = await context.Categories.ToListAsync();
             //return Ok(categorias);
-            return Ok(new ResultViewModel<List<Categoria>>(categorias));
+            return Ok(new ResultViewModel<List<Category>>(categorias));
 
             }
         //catch (Exception ex)
@@ -24,7 +24,7 @@ public class CategoriaController : ControllerBase
 
             {
             //return StatusCode(500, $"código => c01x01 - {ex.Message}");
-            return StatusCode(500, new ResultViewModel<List<Categoria>>($"código => c01x01 - {ex.Message}"));
+            return StatusCode(500, new ResultViewModel<List<Category>>($"código => c01x01 - {ex.Message}"));
             }
         }
 
@@ -33,17 +33,17 @@ public class CategoriaController : ControllerBase
         {
         try
             {
-            var categoria = await context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
+            var categoria = await context.Categories.FirstOrDefaultAsync(x => x.Id == id);
             if (categoria == null)
                 //return NotFound();
-                return NotFound(new ResultViewModel<Categoria>($"Conteudo não encontrado"));
+                return NotFound(new ResultViewModel<Category>($"Conteudo não encontrado"));
             //return Ok(categoria);
-            return Ok(new ResultViewModel<Categoria>(categoria));
+            return Ok(new ResultViewModel<Category>(categoria));
             }
         catch (Exception ex)
             {
             //return StatusCode(500, $"código c02x01 - {ex.Message}");
-            return StatusCode(500, new ResultViewModel<List<Categoria>>($"código c02x02 - {ex.Message}"));
+            return StatusCode(500, new ResultViewModel<List<Category>>($"código c02x02 - {ex.Message}"));
             }
 
         }
@@ -74,19 +74,19 @@ public class CategoriaController : ControllerBase
         {
         //if (!ModelState.IsValid) return BadRequest(ModelState.Values);
         if (!ModelState.IsValid)
-            return BadRequest(new ResultViewModel<List<Categoria>>(ModelState.GetErrors()));
+            return BadRequest(new ResultViewModel<List<Category>>(ModelState.GetErrors()));
 
 
         try
             {
-            var categoria = new Categoria
+            var categoria = new Category
                 {
-                Nome = model.Nome,
+                Name = model.Nome,
                 Slug = model.Slug.ToLower()
                 };
-            await context.Categorias.AddAsync(categoria);
+            await context.Categories.AddAsync(categoria);
             await context.SaveChangesAsync();
-            return Created($"/categorias/{categoria.Id}", new ResultViewModel<Categoria>(categoria));
+            return Created($"/categorias/{categoria.Id}", new ResultViewModel<Category>(categoria));
             }
         catch (DbUpdateException ex)
             {
@@ -125,25 +125,25 @@ public class CategoriaController : ControllerBase
         [FromBody] EditorCategoriaViewModel model)
         {
         if (!ModelState.IsValid)
-            return BadRequest(new ResultViewModel<List<Categoria>>(ModelState.GetErrors()));
+            return BadRequest(new ResultViewModel<List<Category>>(ModelState.GetErrors()));
         try
             {
-            var categoria = await context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
+            var categoria = await context.Categories.FirstOrDefaultAsync(x => x.Id == id);
             if (categoria == null)
                 //return NotFound();
-                return NotFound(new ResultViewModel<List<Categoria>>("Registro não localizado"));
+                return NotFound(new ResultViewModel<List<Category>>("Registro não localizado"));
 
-            categoria.Nome = model.Nome;
+            categoria.Name = model.Nome;
             categoria.Slug = model.Slug.ToLower();
 
-            context.Categorias.Update(categoria);
+            context.Categories.Update(categoria);
             await context.SaveChangesAsync();
             //return Ok(categoria);
-            return Ok(new ResultViewModel<Categoria>(categoria));
+            return Ok(new ResultViewModel<Category>(categoria));
             }
         catch (Exception ex)
             {
-            return StatusCode(500, new ResultViewModel<List<Categoria>>($"error: 04x01 Falha interna => {ex.Message}"));
+            return StatusCode(500, new ResultViewModel<List<Category>>($"error: 04x01 Falha interna => {ex.Message}"));
             }
 
         }
@@ -152,19 +152,19 @@ public class CategoriaController : ControllerBase
         {
         try
             {
-            var categoria = await context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
+            var categoria = await context.Categories.FirstOrDefaultAsync(x => x.Id == id);
             if (categoria == null)
-                return NotFound(new ResultViewModel<List<Categoria>>("Registro não localizado"));
+                return NotFound(new ResultViewModel<List<Category>>("Registro não localizado"));
 
-            context.Categorias.Remove(categoria);
+            context.Categories.Remove(categoria);
             await context.SaveChangesAsync();
             //return NoContent();
-            return Ok(new ResultViewModel<Categoria>(categoria));
+            return Ok(new ResultViewModel<Category>(categoria));
 
             }
         catch (Exception ex)
             {
-            return StatusCode(500, new ResultViewModel<List<Categoria>>($"error: 05x01 Falha interna => {ex.Message}"));
+            return StatusCode(500, new ResultViewModel<List<Category>>($"error: 05x01 Falha interna => {ex.Message}"));
             }
 
         }

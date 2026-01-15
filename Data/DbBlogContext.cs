@@ -8,7 +8,9 @@ namespace Blog.Data
     {
     public class DbBlogContext : DbContext
         {
-        public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         public static string ConnectionString = "Server=develope.database.windows.net;Database=develope;User ID=dev;Password=Silvan@12345";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -17,7 +19,9 @@ namespace Blog.Data
             }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
-            modelBuilder.ApplyConfiguration(new CategoriaMap());
+            modelBuilder.ApplyConfiguration(new CategoryMap());
+            modelBuilder.ApplyConfiguration(new UserMap());
+            modelBuilder.ApplyConfiguration(new RoleMap());
             }
 
 

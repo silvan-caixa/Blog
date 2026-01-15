@@ -198,3 +198,19 @@
 
 ## 7º ETAPA
 ### Revisar aula a partir de AUTENTICAÇÃO E AUTORIZAÇÃO
+	- Utiliza IDE Rider
+	- Cria banco (Category, User, Role)
+		- Models
+			- Category => Name, Slug, CreatedAt
+			- User => Id, Name, Email, PasswordHash, Slug, Bio, Image, CreatedAt
+			- Tag => Id, Name, Slug, CreatedAt
+			- Role => Id, Name, Slug, CreatedAt
+			- Post => Id, Title, Summary, Body, Slug, CreateAt, LastUpdateAt, CategoryId, AuthorId
+			- PostTag => PostId, TagId
+		- Mappings
+			- CategoryMap
+			- UserMap
+			- TagMap
+			- RoleMap
+			- PostMap
+			- PostTagMap

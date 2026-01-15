@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Blog.Data.Mappings;
 
-public class CategoriaMap : IEntityTypeConfiguration<Categoria>
+public class CategoryMap : IEntityTypeConfiguration<Category>
     {
-    public void Configure(EntityTypeBuilder<Categoria> builder)
+    public void Configure(EntityTypeBuilder<Category> builder)
         {
         // Table
-        builder.ToTable("Categorias", "Api");
+        builder.ToTable("Category", "Api");
         //PK
         builder.HasKey(c => c.Id)
             .HasName("CategoriaId");
@@ -19,18 +19,18 @@ public class CategoriaMap : IEntityTypeConfiguration<Categoria>
             .UseIdentityColumn();
 
         // Propriedade
-        builder.Property(c => c.Nome)
+        builder.Property(c => c.Name)
             .IsRequired()
-            .HasColumnName("Nome")
+            .HasColumnName("Name")
             .HasColumnType("NVARCHAR")
             .HasMaxLength(80);
         builder.Property(c => c.Slug)
             .IsRequired()
             .HasColumnType("NVARCHAR")
             .HasMaxLength(60);
-        builder.Property(c => c.DataCriacao)
+        builder.Property(c => c.CreatedAt)
             .IsRequired()
-            .HasColumnName("DataCriacao")
+            .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME")
             //.HasDefaultValueSql("GETDATE()")
             ;
