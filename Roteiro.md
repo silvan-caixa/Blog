@@ -263,3 +263,29 @@
 	- Testa no Postman
 	- site jwt.io // inspeciona o token
 
+### No TokenService.cs
+    - No tokenDescriptor
+        - inclui 
+                - Subject = new ClaimsIdentity(new Claim[])
+        {
+        new Claim("ClaimTypes.Name","silvasilva");
+        new Claim("ClaimTypes.Role","admin");
+        new Claim ("Fruta", "banana")
+       }
+### Libera autorização e autenticação da aplicação é no Program.cs 
+    - var key = Encoding.ASCII.GetBytes(Configuration.JwtKey);
+    - builder.Services.AddAuthenticate(x=>{ 
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme
+    x.DefaultChallengeScheme = JwtBearerDefault.AuthenticationSchema;
+    }).AddJwtBearer(x=>{
+    x.TokenValidationParameters = new TokenValidationParameters{
+        validateIssuerSigningKey = new SymmetricSecurityKey,
+        ValidateIssuer = false,
+        ValidateAudience = false
+    }
+    });
+    - app.UseAuthentication();
+    - app.UseAuthorization();
+
+### Encerrando essa etapa. Parei na aula Configurando autenticação e autorização
+    - feito somente os apontamento teórico no roteiro falta implementar o codigo dessa etapa
