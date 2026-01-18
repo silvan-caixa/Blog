@@ -220,4 +220,46 @@
 			- prop string JwtKey = "esta é a chave secreta do meu token"
 			- 
 
-	# Proxima aula TOKEN SERVICE
+### Criar pasta Services
+	- Instala pacote
+		- dotnet add package Microsoft.AspNetCore.Authentication
+		- dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+	- Cria class TokenService.cs
+		- Metodo public string GenerateToken(User user)
+			cria estancia:
+				- var tokenHandler = new JwtSecurityTokenHandler();
+				// Convert para array de bytes
+				- var key = Encoding.ASCII.GetBytes(Configuration.JwtKey);
+				// Esse item contém todo configuração do token
+				- var TokenDescriptor = new SecurityTokenDescriptor
+				{
+				Expires = DateTime.UtcNow.AddHours(2),
+				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorthms.HmacSha256Signature)	
+				};
+				var token = tokenHandler.CreateToken(tokenDescriptor);
+				return tokenHandler.WriteToken(token);
+### Implementar o conceito de injeção de independência
+		- Program.cs
+			//- builder.Services.AddScoped<TokenService>(); // cria uma instancia por requisicao
+			- builder.Services.AddTransient<TokenService>() // cria uma nova instancia
+			//- builder.Services.AddSingleton() // cria uma unica instancia para toda aplicação
+
+### Controller
+			- cria a class AccountController.cs : ControllerBase
+				- prop private readonly TokenService _tokenService;
+				- construtor public AccountController(TokenService tokenService)
+					- _tokenService = tokenService;
+				- [ApiController] => Fica sobre a class
+				- [RouterPost("v1/login")] => Fica sobre o metodo
+				- metodo public IActionResult Login([FromServices] TokenService tokenService)					
+					//- var tokenService = new TokenService();
+					- var token = _tokenService.GenerateToken(new User());
+					- return Ok(token)
+
+### Finalizado fase de configuração do Token tentar implementar
+
+### Proxima aula
+### Inspecionando o TOKEN
+	- Testa no Postman
+	- site jwt.io // inspeciona o token
+
