@@ -279,7 +279,8 @@
     x.DefaultChallengeScheme = JwtBearerDefault.AuthenticationSchema;
     }).AddJwtBearer(x=>{
     x.TokenValidationParameters = new TokenValidationParameters{
-        validateIssuerSigningKey = new SymmetricSecurityKey,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = false,
         ValidateAudience = false
     }
@@ -289,3 +290,46 @@
 
 ### Encerrando essa etapa. Parei na aula Configurando autenticação e autorização
     - feito somente os apontamento teórico no roteiro falta implementar o codigo dessa etapa
+    - Implementado o código
+    - Resumo geral:
+        - Foi a criado a pasta Services adicionado a class ToKenService.cs. 
+            - Foi gerado o token usando o metodo GenerateToken com as variaveis tokenHandler, key, tokenDecriptor.
+            - No tokenDecriptor foi instanciado SecurityTokenDescriptor e incluido os item Subject, Experires, SigningCredentials.
+            - Criado outra variavel token que recebe tokenHandler.CreateToken(tokenDescriptor) a criação do token
+            - Que return tokenHandler.WriteToken(token)
+        - Na pasta Controllers cria a class AccountController
+            - private readonly TokenService _tokenService;
+            -  public AccountController(TokenService tokenService)
+            {
+                _tokenService =  tokenService;
+            }
+            - [HttpGet("v1/login")]
+            - public IActionResult Login([FromServices] TokenService tokenService)
+            {
+                //var tokenService = new TokenService();
+                var token = _tokenService.GenerateToken(new User());
+                
+                return Ok(token);
+            }
+        - No program.cs
+            - var key = Encoding.ASCII.GetBytes(Configuration.JwtKey);
+                builder.Services.AddAuthentication(x =>
+                {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                }).AddJwtBearer(x =>
+                {
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false
+                };
+                });
+            - builder.Services.AddTransient<TokenService>();
+            - app.UseAuthentication();
+            - app.UseAuthorization();
+        
+        
+### Iniciar os testes, proxima aula "TESTANDO AUTENTICAÇÃO E AUTORIZAÇÃO"

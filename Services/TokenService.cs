@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using Blog.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +14,13 @@ public class TokenService
         var key = Encoding.ASCII.GetBytes(Configuration.JwtKey);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
+            Subject = new ClaimsIdentity(new Claim[]
+            {
+                new ("Fruta", "Banana"),
+                new ("ClaimTypes.Name", "silvansilva"),
+                new ("ClaimTypes.Role", "admin")
+                    
+            }),
             Expires = DateTime.UtcNow.AddDays(2),
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -24,3 +32,5 @@ public class TokenService
     }
 }
    
+   
+  
