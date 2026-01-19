@@ -16,9 +16,13 @@ public class TokenService
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new ("Fruta", "Banana"),
-                new ("ClaimTypes.Name", "silvansilva"),
-                new ("ClaimTypes.Role", "admin")
+                new (ClaimTypes.Name, "silvansilva"),
+                new (ClaimTypes.Role,"author"),
+                new (ClaimTypes.Role, "admin"),
+                new (ClaimTypes.Role, "user"),
+                
+                new ("Fruta", "Banana")
+                
                     
             }),
             Expires = DateTime.UtcNow.AddDays(2),

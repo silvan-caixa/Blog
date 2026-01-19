@@ -1,5 +1,6 @@
 using Blog.Models;
 using Blog.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Data.Controllers;
@@ -8,7 +9,7 @@ namespace Blog.Data.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly TokenService _tokenService;
-
+    
     public AccountController(TokenService tokenService)
     {
         _tokenService =  tokenService;
@@ -17,8 +18,17 @@ public class AccountController : ControllerBase
     public IActionResult Login([FromServices] TokenService tokenService)
     {
         //var tokenService = new TokenService();
-        var token = _tokenService.GenerateToken(new User());
+        var token = _tokenService.GenerateToken(null);
         
         return Ok(token);
     }
+    [Authorize(Roles = "user")]
+    [HttpGet("v1/user")]
+    public IActionResult GetUser() => Ok(User.Identity.Name);
+    [Authorize(Roles = "author")]
+    [HttpGet("v1/author")]
+    public IActionResult GetAuthor() => Ok(User.Identity.Name);
+    [Authorize(Roles = "admin")]
+    [HttpGet("v1/admin")]
+    public IActionResult GetAdmin() => Ok(User.Identity.Name);
 }

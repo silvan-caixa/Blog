@@ -333,3 +333,40 @@
         
         
 ### Iniciar os testes, proxima aula "TESTANDO AUTENTICAÇÃO E AUTORIZAÇÃO"
+    - AccountController.cs
+        - Cria 3 metodo get para user, author, admin
+        - [HttpGet("v1/user")]
+        - public IActionResult GetUser() => Ok(User.Identity.Name)
+        - Entender bem autorizado e autenticado. Primeiro vem a autenticação para
+            identificar o user depois vem autorização para usar o rota permitida
+        - [Authorize(Roles = "user")] => pode fica no ApiController ou no metodo HttpGet("v1/user")
+            - Ele verifica se usuario está logado
+        - [AllowAnonymous] => metodo HttpGet("v1/user")
+    - TokenService.cs
+        - inclui o Role, Admin
+
+### Implementado e testado autenticaçao
+
+### Implementar cadastro do usuario
+### Cadastrar Usuario
+    - ViewModels
+        - cria a class RegisterViewModel
+            - prop name, email
+            - Atributos
+                - [Required(ErrorMessage = "Campo obrigatorio")]
+                - [EmailAddres(ErrorMessage = "Email inválido")]
+    - Controllers
+        - AccuntController
+            - [HttpPost("v1/accounts/")]
+            - public async Task<IActionResult>Post(FromBody RegisterViewModel model, 
+                [FromServices]BlogDataContext context){copiar os modelos ja implementado}
+            - Slug =  model.Email.Replace("@","-").Replace(".","-")
+### Salvando senha no banco de dados
+    - Instalar pacote: 
+        - dotnet add package SecureIdentity
+    - var password = PasswordGenerator.Generate(25);
+        user.PasswordHash = PasswordHasher.Hash(password)
+    - Revisar a aula REGISTRANDO UM NOVO USUARIO
+    
+
+    
