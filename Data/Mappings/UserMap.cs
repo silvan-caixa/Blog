@@ -41,9 +41,10 @@ namespace Blog.Data.Mappings
             builder.Property(x => x.CreatedAt)
                 .IsRequired()
                 .HasColumnName("CreatedAt")
-                //.HasDefaultValueSql("GETDATE()") -- gera no banco
+                .HasDefaultValueSql("GETDATE()") // gera no banco
                 //.HasDefaultValue(DateTime.Now.ToUniversalTime()) -- gera no codigo
                 .HasColumnType("DATETIME");
+            
 
             // Index
             // Relacionamento

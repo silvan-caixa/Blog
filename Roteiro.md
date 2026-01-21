@@ -367,6 +367,8 @@
     - var password = PasswordGenerator.Generate(25);
         user.PasswordHash = PasswordHasher.Hash(password)
     - Revisar a aula REGISTRANDO UM NOVO USUARIO
-    
+    - Implementado Account para iserir usario com senha
+
+### Proxima aula autenticacao
 
     
