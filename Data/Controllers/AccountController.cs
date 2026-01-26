@@ -76,14 +76,10 @@ public class AccountController : ControllerBase
     }
     
     [HttpGet("v1/login")]
-    public IActionResult Login(
-        [FromServices] TokenService tokenService)
+    public IActionResult Login([FromServices] TokenService tokenService)
     {
         //var tokenService = new TokenService();
-        var user = context.Users.AsNoTracking()
-            .Include(u => u.Roles)
-            .FirstOrDefault(u => u.Email == User.Identity.Name);
-        var token = _tokenService.GenerateToken(user);
+        var token = _tokenService.GenerateToken(null);
         
         return Ok(token);
     }
