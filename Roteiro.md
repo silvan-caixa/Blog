@@ -370,5 +370,31 @@
     - Implementado Account para iserir usario com senha
 
 ### Proxima aula autenticacao
+    - ViewModel
+        - class LoginViewModel
+            - Name, Email
+            - Requirid
+    -  AccountController 
+        - Implementar o post
+    - ModelState
+        - if(!ModelState.IsValid) => BadRequest(new ResultViewModel<string>(ModelState.GetErrors()))
+
+    - Recupera usuario do banco
+        - var user = await context.Users.AsNoTracking().Include(x=>x.Roles).FirstOrDefaultAsync(x=>x.Email == model.Email)
+        - if(user == null) => StatusCode(401, new ResultViewModel<string>(˜Usuario ou senha invalida˜))
+        - if(!PasswordHasher.Verify(user.PasswordHash, model.Password)) => StatusCode(401, new ResultViewModel<string>(˜Usuario ou senha invalida˜))
+        try{var token = tokenService.GenerateToken(User); return Ok(new ResultViwModel<string>(token, null));}
+        catch{return StatusCode(500, ResultModelView<string>("05X04 - Falha interna " ))}
+
+    - Ajustando class TokenService.cs
+        - 
+    - Extensions
+        - Criar RoleClaimsExtencion.cs  
+
+    - Senha gif3;}sMEDN@Gv)gu4ˆ2E{qBj
+        "user": "silva@example.com",
+    "password": "dTA2vC)!3;*DC;ssRK$P3c$J3"
+
+    - Finalizado parcial falta revisar essa etapa e praticar mais
 
     

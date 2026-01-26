@@ -20,6 +20,31 @@ public class AccountController : ControllerBase
         _tokenService =  tokenService;
     }
 
+    [HttpPost("v1/login")]
+    public async Task<IActionResult> AsyncLogin(
+        [FromBody] LoginViewModel model, 
+        [FromServices] DbBlogContext context)
+    {
+     if(!ModelState.IsValid)  BadRequest(new ResultViewModel<string>(ModelState.GetErrors()));   
+     
+     var user = await context.Users
+         .AsNoTracking()
+         .Include(u => u.Roles)
+         .FirstOrDefaultAsync(u => u.Email == model.Email);
+     if(user == null) StatusCode(400, new ResultViewModel<string>("Usuario ou email invalido"));
+     if(!PasswordHasher.Verify(user.PasswordHash, model.Password)) StatusCode(400, new ResultViewModel<string>("Usuario ou email invalido"));
+     try
+     {
+         var token = _tokenService.GenerateToken(user);
+         return Ok(new ResultViewModel<string>(token, null));
+     }
+     catch
+     {
+         return StatusCode(500, new ResultViewModel<string>("Erro ao tentar acessar"));
+     }
+    
+    }
+
     [HttpPost("v1/account/")]
     public async Task<IActionResult> AsyncPost([FromBody] RegisterViewModel model, [FromServices] DbBlogContext context)
     {
@@ -51,10 +76,14 @@ public class AccountController : ControllerBase
     }
     
     [HttpGet("v1/login")]
-    public IActionResult Login([FromServices] TokenService tokenService)
+    public IActionResult Login(
+        [FromServices] TokenService tokenService)
     {
         //var tokenService = new TokenService();
-        var token = _tokenService.GenerateToken(null);
+        var user = context.Users.AsNoTracking()
+            .Include(u => u.Roles)
+            .FirstOrDefault(u => u.Email == User.Identity.Name);
+        var token = _tokenService.GenerateToken(user);
         
         return Ok(token);
     }
